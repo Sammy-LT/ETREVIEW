@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Star, Popcorn, Search, Calendar, Users, Home as HomeIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export default function Home() {
   const trendingMovies = [
@@ -13,7 +14,8 @@ export default function Home() {
       year: 2009,
       director: "Davey Frankel",
       rating: 4.2,
-      poster: "/placeholder.jpg"
+      poster: "/placeholder.jpg",
+      genres: ["Biography", "Drama"]
     },
     { 
       id: 2,
@@ -21,7 +23,8 @@ export default function Home() {
       year: 2015,
       director: "Yared Zeleke",
       rating: 3.9,
-      poster: "/placeholder.jpg"
+      poster: "/placeholder.jpg",
+      genres: ["Drama", "Family"]
     },
     {
       id: 3,
@@ -29,7 +32,8 @@ export default function Home() {
       year: 2014,
       director: "Zeresenay Berhane Mehari",
       rating: 4.1,
-      poster: "/placeholder.jpg"
+      poster: "/placeholder.jpg",
+      genres: ["Drama", "Legal"]
     },
     {
       id: 4,
@@ -37,7 +41,39 @@ export default function Home() {
       year: 2015,
       director: "Hermon Hailay",
       rating: 3.7,
-      poster: "/placeholder.jpg"
+      poster: "/placeholder.jpg",
+      genres: ["Romance", "Drama"]
+    }
+  ];
+
+  const allMovies = [
+    ...trendingMovies,
+    {
+      id: 5,
+      title: "Yewendoch Guday",
+      year: 2023,
+      director: "Yonas Birhane",
+      rating: 4.2,
+      poster: "/placeholder.jpg",
+      genres: ["Drama", "Romance"]
+    },
+    {
+      id: 6,
+      title: "Sew Le Sew",
+      year: 2022,
+      director: "Ephrem Amare",
+      rating: 4.5,
+      poster: "/placeholder.jpg",
+      genres: ["Comedy", "Drama"]
+    },
+    {
+      id: 7,
+      title: "Ye Wonz Maibel",
+      year: 2021,
+      director: "Hermon Hailay",
+      rating: 3.9,
+      poster: "/placeholder.jpg",
+      genres: ["Drama", "Family"]
     }
   ];
 
@@ -67,18 +103,18 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Film className="h-8 w-8 text-yellow-500" />
-            <h1 className="text-2xl font-bold">Ethio<span className="text-yellow-500">Flix</span></h1>
+            <Link href="/" className="text-2xl font-bold">Ethio<span className="text-yellow-500">Flix</span></Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-6">
-            <a href="#" className="flex items-center space-x-1 text-gray-300 hover:text-white">
-              
+            <Link href="/" className="flex items-center space-x-1 text-gray-300 hover:text-white">
+              <HomeIcon className="h-4 w-4" />
               <span>Home</span>
-            </a>
-            <a href="#" className="flex items-center space-x-1 text-gray-300 hover:text-white">
+            </Link>
+            <Link href="/movies" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <Film className="h-4 w-4" />
               <span>Movies</span>
-            </a>
+            </Link>
             <a href="#" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <Users className="h-4 w-4" />
               <span>Community</span>
@@ -123,39 +159,51 @@ export default function Home() {
       {/* Main Content */}
       <section className="container mx-auto px-4 py-8">
         <Tabs defaultValue="trending" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800">
+          <TabsList className="grid w-full grid-cols-3 bg-gray-800">
             <TabsTrigger value="trending" className="data-[state=active]:bg-gray-700">
               <Popcorn className="h-4 w-4 mr-2" />
-              Trending Movies
+              Trending
+            </TabsTrigger>
+            <TabsTrigger value="all" className="data-[state=active]:bg-gray-700">
+              <Film className="h-4 w-4 mr-2" />
+              All Movies
             </TabsTrigger>
             <TabsTrigger value="reviews" className="data-[state=active]:bg-gray-700">
               <Star className="h-4 w-4 mr-2" />
-              Recent Reviews
+              Reviews
             </TabsTrigger>
           </TabsList>
           
+          {/* Trending Tab */}
           <TabsContent value="trending">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
               {trendingMovies.map((movie) => (
                 <Card key={movie.id} className="bg-gray-800 border-gray-700 hover:border-yellow-500 transition-colors">
-                  <CardHeader>
-                    <div className="aspect-[2/3] bg-gray-700 rounded-md flex items-center justify-center">
+                  <CardHeader className="p-0">
+                    <div className="aspect-[2/3] bg-gray-700 rounded-t-md flex items-center justify-center">
                       <Film className="h-12 w-12 text-gray-500" />
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-4">
                     <CardTitle className="text-lg">{movie.title}</CardTitle>
                     <CardDescription className="text-gray-400">
                       {movie.year} • {movie.director}
                     </CardDescription>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {movie.genres.map(genre => (
+                        <Badge key={genre} variant="secondary" className="text-xs bg-gray-700">
+                          {genre}
+                        </Badge>
+                      ))}
+                    </div>
                   </CardContent>
-                  <CardFooter className="flex justify-between items-center">
+                  <CardFooter className="flex justify-between items-center p-4 pt-0">
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
                       <span>{movie.rating}</span>
                     </div>
                     <Button variant="outline" size="sm" className="border-gray-600">
-                      Review
+                      Details
                     </Button>
                   </CardFooter>
                 </Card>
@@ -163,6 +211,44 @@ export default function Home() {
             </div>
           </TabsContent>
           
+          {/* All Movies Tab */}
+          <TabsContent value="all">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+              {allMovies.map((movie) => (
+                <Card key={movie.id} className="bg-gray-800 border-gray-700 hover:border-yellow-500 transition-colors">
+                  <CardHeader className="p-0">
+                    <div className="aspect-[2/3] bg-gray-700 rounded-t-md flex items-center justify-center">
+                      <Film className="h-12 w-12 text-gray-500" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <CardTitle className="text-lg">{movie.title}</CardTitle>
+                    <CardDescription className="text-gray-400">
+                      {movie.year} • {movie.director}
+                    </CardDescription>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {movie.genres.map(genre => (
+                        <Badge key={genre} variant="secondary" className="text-xs bg-gray-700">
+                          {genre}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-between items-center p-4 pt-0">
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
+                      <span>{movie.rating}</span>
+                    </div>
+                    <Button variant="outline" size="sm" className="border-gray-600">
+                      Details
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+          
+          {/* Reviews Tab */}
           <TabsContent value="reviews">
             <div className="space-y-6 mt-6">
               {recentReviews.map((review) => (
