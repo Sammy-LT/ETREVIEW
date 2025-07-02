@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Star, Popcorn, Search, Calendar, Users, Home as HomeIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { BookOpen } from "lucide-react";
+import {  User, CalendarDays, MessageSquare } from "lucide-react";
 
 export default function Home() {
   const trendingMovies = [
@@ -115,6 +117,12 @@ export default function Home() {
               <Film className="h-4 w-4" />
               <span>Movies</span>
             </Link>
+
+<Link href="/stories" className="flex items-center space-x-1 text-gray-300 hover:text-white">
+        <BookOpen className="h-4 w-4" /> {/* Using BookOpen icon for stories */}
+        <span>Recent Stories</span>
+      </Link>
+
             <a href="#" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <Users className="h-4 w-4" />
               <span>Community</span>
