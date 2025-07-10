@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  //output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,73 +8,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
-
-enum WatchStatus {
-  PLAN_TO_WATCH
-  WATCHING
-  WATCHED
-}
-
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   name      String
-  username  String   @unique
-  email     String   @unique
+  username  String      @unique
+  email     String      @unique
   password  String
   bio       String?
   avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  reviews   Review[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
   ratings   Rating[]
+  reviews   Review[]
   watchlist Watchlist[]
 }
 
 model Movie {
-  id        Int      @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   title     String
   year      Int
   plot      String?
   poster    String?
-  country   String   @default("Ethiopia")
-  language  String   @default("Amharic")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  reviews   Review[]
-  ratings   Rating[]
-  watchlist Watchlist[]
+  country   String       @default("Ethiopia")
+  language  String       @default("Amharic")
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
   genres    MovieGenre[]
+  ratings   Rating[]
+  reviews   Review[]
+  watchlist Watchlist[]
 }
 
 model Review {
   id               Int      @id @default(autoincrement())
   content          String
-  rating           Float?   // optional, if user wants to give a rating with review
+  rating           Float?
   containsSpoilers Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-
-  author   User  @relation(fields: [authorId], references: [id])
-  authorId Int
-  movie    Movie @relation(fields: [movieId], references: [id])
-  movieId  Int
+  authorId         Int
+  movieId          Int
+  author           User     @relation(fields: [authorId], references: [id])
+  movie            Movie    @relation(fields: [movieId], references: [id])
 }
 
 model Rating {
   id        Int      @id @default(autoincrement())
-  score     Float    // e.g., 0.5 to 5.0
+  score     Float
   createdAt DateTime @default(now())
+  userId    Int
+  movieId   Int
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
-  user    User  @relation(fields: [userId], references: [id])
-  userId  Int
-  movie   Movie @relation(fields: [movieId], references: [id])
-  movieId Int
-
-  @@unique([userId, movieId])  // user can rate a movie once
+  @@unique([userId, movieId])
 }
 
 model Watchlist {
@@ -88,27 +69,31 @@ model Watchlist {
   status    WatchStatus @default(PLAN_TO_WATCH)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-
-  user    User  @relation(fields: [userId], references: [id])
-  userId  Int
-  movie   Movie @relation(fields: [movieId], references: [id])
-  movieId Int
+  userId    Int
+  movieId   Int
+  movie     Movie       @relation(fields: [movieId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
 
   @@unique([userId, movieId])
 }
 
 model Genre {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-
+  id     Int          @id @default(autoincrement())
+  name   String       @unique
   movies MovieGenre[]
 }
 
 model MovieGenre {
-  movie   Movie @relation(fields: [movieId], references: [id])
   movieId Int
-  genre   Genre @relation(fields: [genreId], references: [id])
   genreId Int
+  genre   Genre @relation(fields: [genreId], references: [id])
+  movie   Movie @relation(fields: [movieId], references: [id])
 
   @@id([movieId, genreId])
+}
+
+enum WatchStatus {
+  PLAN_TO_WATCH
+  WATCHING
+  WATCHED
 }

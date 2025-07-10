@@ -1,3 +1,5 @@
+"use client";
+import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -5,41 +7,25 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Star, Popcorn, Search, Calendar, Users, Home as HomeIcon } from "lucide-react";
 
-export default function Home() {
-  const trendingMovies = [
-    {
-      id: 1,
-      title: "The Athlete",
-      year: 2009,
-      director: "Davey Frankel",
-      rating: 4.2,
-      poster: "/placeholder.jpg"
+export default async function Home() {
+  // Fetch movies from the database
+  const movies = await prisma.movie.findMany({
+    include: {
+      genres: { include: { genre: true } },
+      ratings: true,
+      reviews: true,
     },
-    { 
-      id: 2,
-      title: "Lamb",
-      year: 2015,
-      director: "Yared Zeleke",
-      rating: 3.9,
-      poster: "/placeholder.jpg"
-    },
-    {
-      id: 3,
-      title: "Difret",
-      year: 2014,
-      director: "Zeresenay Berhane Mehari",
-      rating: 4.1,
-      poster: "/placeholder.jpg"
-    },
-    {
-      id: 4,
-      title: "Price of Love",
-      year: 2015,
-      director: "Hermon Hailay",
-      rating: 3.7,
-      poster: "/placeholder.jpg"
-    }
-  ];
+    orderBy: { createdAt: "desc" },
+    take: 8, // limit for demo
+  });
+
+  // Optionally, calculate average rating for each movie
+  const moviesWithRating = movies.map((movie) => {
+    const avgRating = movie.ratings.length
+      ? movie.ratings.reduce((acc, r) => acc + r.score, 0) / movie.ratings.length
+      : null;
+    return { ...movie, avgRating };
+  });
 
   const recentReviews = [
     {
@@ -136,23 +122,42 @@ export default function Home() {
           
           <TabsContent value="trending">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-              {trendingMovies.map((movie) => (
+              {moviesWithRating.map((movie) => (
                 <Card key={movie.id} className="bg-gray-800 border-gray-700 hover:border-yellow-500 transition-colors">
                   <CardHeader>
-                    <div className="aspect-[2/3] bg-gray-700 rounded-md flex items-center justify-center">
-                      <Film className="h-12 w-12 text-gray-500" />
-                    </div>
-                  </CardHeader>
+  <div className="aspect-[2/3] bg-gray-700 rounded-md overflow-hidden relative">
+    {movie.poster ? (
+      <img
+        src={movie.poster}
+        alt={movie.title}
+        className="w-full h-full object-cover"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "";
+          e.currentTarget.parentElement!.innerHTML = `
+            <div class="w-full h-full flex items-center justify-center bg-gray-700">
+              <Film class="h-12 w-12 text-gray-500" />
+            </div>
+          `;
+        }}
+      />
+    ) : (
+      <div className="w-full h-full flex items-center justify-center bg-gray-700">
+        <Film className="h-12 w-12 text-gray-500" />
+      </div>
+    )}
+  </div>
+</CardHeader>
                   <CardContent>
                     <CardTitle className="text-lg">{movie.title}</CardTitle>
                     <CardDescription className="text-gray-400">
-                      {movie.year} • {movie.director}
+                      {movie.year}
                     </CardDescription>
                   </CardContent>
                   <CardFooter className="flex justify-between items-center">
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
-                      <span>{movie.rating}</span>
+                      <span>{movie.avgRating}</span>
                     </div>
                     <Button variant="outline" size="sm" className="border-gray-600">
                       Review
