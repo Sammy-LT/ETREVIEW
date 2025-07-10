@@ -85,24 +85,13 @@ export default function UpcomingPage() {
               <BookOpen className="h-4 w-4" />
               <span>Recent Stories</span>
             </Link>
-            <a href="#" className="flex items-center space-x-1 text-gray-300 hover:text-white">
-              <Users className="h-4 w-4" />
-              <span>Community</span>
-            </a>
+           
             <Link href="/upcoming" className="flex items-center space-x-1 text-yellow-500">
               <Calendar className="h-4 w-4" />
               <span>Upcoming</span>
             </Link>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="hidden md:flex">
-              Sign In
-            </Button>
-            <Button className="bg-yellow-600 hover:bg-yellow-700">
-              Sign Up
-            </Button>
-          </div>
         </div>
       </nav>
 

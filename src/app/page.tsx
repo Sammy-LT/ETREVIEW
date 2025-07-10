@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      {/* Navigation */}
+      
       <nav className="border-b border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -121,24 +121,14 @@ export default function Home() {
               <BookOpen className="h-4 w-4" />
               <span>Recent Stories</span>
             </Link>
-            <Link href="#" className="flex items-center space-x-1 text-gray-300 hover:text-white">
-              <Users className="h-4 w-4" />
-              <span>Community</span>
-            </Link>
+            >
             <Link href="/upcoming" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <Calendar className="h-4 w-4" />
               <span>Upcoming</span>
             </Link>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="hidden md:flex">
-              Sign In
-            </Button>
-            <Button className="bg-yellow-600 hover:bg-yellow-700">
-              Sign Up
-            </Button>
-          </div>
+          
         </div>
       </nav>
 
