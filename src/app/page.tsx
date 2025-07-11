@@ -3,9 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Film, Star, Popcorn, Search, Calendar, Users, Home as HomeIcon } from "lucide-react";
+import { Film, Star, Popcorn, Search, Calendar, Users} from "lucide-react";
 
 export default async function Home() {
   // Fetch movies from the database
