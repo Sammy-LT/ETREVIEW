@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ export default function Home() {
       year: 2009,
       director: "Davey Frankel",
       rating: 4.2,
-      poster: "/placeholder.jpg",
+      poster: "https://i.ytimg.com/vi/k662i8OmOgg/hqdefault.jpg",
       genres: ["Biography", "Drama"]
     },
     { 
@@ -25,7 +26,7 @@ export default function Home() {
       year: 2015,
       director: "Yared Zeleke",
       rating: 3.9,
-      poster: "/placeholder.jpg",
+      poster: "https://i.ytimg.com/vi/M5yOMUjUQdU/hqdefault.jpg",
       genres: ["Drama", "Family"]
     },
     {
@@ -34,7 +35,7 @@ export default function Home() {
       year: 2014,
       director: "Zeresenay Berhane Mehari",
       rating: 4.1,
-      poster: "/placeholder.jpg",
+      poster: "https://i.ytimg.com/vi/vtY0zHaRNl8/hqdefault.jpg",
       genres: ["Drama", "Legal"]
     },
     {
@@ -43,7 +44,7 @@ export default function Home() {
       year: 2015,
       director: "Hermon Hailay",
       rating: 3.7,
-      poster: "/placeholder.jpg",
+      poster: "https://i.ytimg.com/vi/dc9sWVm0DQM/hqdefault.jpg",
       genres: ["Romance", "Drama"]
     }
   ];
@@ -119,13 +120,10 @@ export default function Home() {
             </Link>
             <Link href="/stories" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <BookOpen className="h-4 w-4" />
-              <span>Recent Stories</span>
+              <span>News</span>
             </Link>
-            >
-            <Link href="/upcoming" className="flex items-center space-x-1 text-gray-300 hover:text-white">
-              <Calendar className="h-4 w-4" />
-              <span>Upcoming</span>
-            </Link>
+            
+           
           </div>
           
           
@@ -175,11 +173,31 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
               {trendingMovies.map((movie) => (
                 <Card key={movie.id} className="bg-gray-800 border-gray-700 hover:border-yellow-500 transition-colors">
-                  <CardHeader className="p-0">
-                    <div className="aspect-[2/3] bg-gray-700 rounded-t-md flex items-center justify-center">
-                      <Film className="h-12 w-12 text-gray-500" />
-                    </div>
-                  </CardHeader>
+                  <CardHeader>
+  <div className="aspect-[2/3] bg-gray-700 rounded-md overflow-hidden relative">
+    {movie.poster ? (
+      <img
+        src={movie.poster}
+        alt={movie.title}
+        className="w-full h-full object-cover"
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "";
+          e.currentTarget.parentElement!.innerHTML = `
+            <div class="w-full h-full flex items-center justify-center bg-gray-700">
+              <Film class="h-12 w-12 text-gray-500" />
+            </div>
+          `;
+        }}
+      />
+    ) : (
+      <div className="w-full h-full flex items-center justify-center bg-gray-700">
+        <Film className="h-12 w-12 text-gray-500" />
+      </div>
+    )}
+  </div>
+</CardHeader>
+ 
                   <CardContent className="p-4">
                     <CardTitle className="text-lg">{movie.title}</CardTitle>
                     <CardDescription className="text-gray-400">
@@ -286,9 +304,7 @@ export default function Home() {
             Join our community of Ethiopian cinema enthusiasts and share your passion for film.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button className="bg-yellow-600 hover:bg-yellow-700 px-8 py-6 text-lg">
-              Sign Up - It's Free
-            </Button>
+           
             <Button variant="outline" className="border-gray-500 px-8 py-6 text-lg">
               Learn More
             </Button>

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, User, CalendarDays, MessageSquare, Star, Film, Plus } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const recentStories = [
   {
@@ -37,7 +39,8 @@ const recentStories = [
   }
 ];
 
-export default function StoriesPage() {
+export default async function StoriesPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       {/* Navigation */}
@@ -59,11 +62,7 @@ export default function StoriesPage() {
             </Link>
             <Link href="/stories" className="flex items-center space-x-1 text-yellow-500">
               <BookOpen className="h-4 w-4" />
-              <span>Recent Stories</span>
-            </Link>
-            <Link href="/upcoming" className="flex items-center space-x-1 text-gray-300 hover:text-white">
-              <CalendarDays className="h-4 w-4" />
-              <span>Upcoming</span>
+              <span>News</span>
             </Link>
           </div>
           
@@ -75,11 +74,18 @@ export default function StoriesPage() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="flex items-center space-x-4">
-            <h1 className="text-3xl font-bold text-yellow-500">Recent Stories</h1>
+            <h1 className="text-3xl font-bold text-yellow-500">News</h1>
             <Badge variant="outline" className="bg-gray-800 border-gray-700 text-yellow-500">
               <BookOpen className="h-4 w-4 mr-2" />
               {recentStories.length} stories
             </Badge>
+            {session?.user?.email?.toLowerCase() === "admin@gmail.com" && (
+              <Link href="/admin/add-news">
+                <button className="ml-4 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded shadow flex items-center">
+                  <Plus className="h-4 w-4 mr-2" /> Add News
+                </button>
+              </Link>
+            )}
           </div>
           
           <div className="flex space-x-3 w-full md:w-auto">

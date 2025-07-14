@@ -83,12 +83,7 @@ export default function UpcomingPage() {
             </Link>
             <Link href="/stories" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <BookOpen className="h-4 w-4" />
-              <span>Recent Stories</span>
-            </Link>
-           
-            <Link href="/upcoming" className="flex items-center space-x-1 text-yellow-500">
-              <Calendar className="h-4 w-4" />
-              <span>Upcoming</span>
+              <span>News</span>
             </Link>
           </div>
           
