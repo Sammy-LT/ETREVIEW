@@ -2,13 +2,14 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, Calendar, Film, ArrowLeft, Clock, Popcorn } from "lucide-react";
+import { Star, Calendar, Film, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import ReviewForm from "@/components/ReviewForm";
 import { Badge } from "@/components/ui/badge";
 import StarRating from "@/components/StarRating";
 import { authClient } from "@/lib/auth-client";
 import QuickStarRating from "@/components/QuickStarRating";
+import PaginatedReviews from "@/components/PaginatedReviews";
 
 export default async function MovieDetailsPage({ params }: { params: { id: string } }) {
   const movie = await prisma.movie.findUnique({
@@ -98,54 +99,7 @@ export default async function MovieDetailsPage({ params }: { params: { id: strin
 
        
         <div className="mt-8 border-t border-gray-800 pt-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-green-500">Reviews</h2>
-            {avgRating && (
-              <div className="flex items-center">
-                <Star className="h-5 w-5 text-green-500 mr-1" />
-                <span className="font-bold">{avgRating.toFixed(1)}</span>
-                <span className="text-gray-400 ml-1">/ 5 from {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</span>
-              </div>
-            )}
-          </div>
-
-          <ReviewForm movieId={movie.id} />
-
-          {reviews.length > 0 ? (
-            <div className="space-y-6 mt-6">
-              {reviews.map(r => (
-                <Card key={r.id} className="bg-gray-900 border-gray-800">
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex mr-2">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${i < r.rating ? "fill-green-500 text-green-500" : "text-gray-700"}`}
-                            />
-                          ))}
-                        </div>
-                        <span className="font-bold text-green-500">{r.user?.name || "Anonymous"}</span>
-                      </div>
-                      <span className="text-sm text-gray-400">
-                        {new Date(r.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300">{r.comment}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <Card className="bg-gray-900 border-gray-800">
-              <CardContent className="py-8 text-center text-gray-500">
-                No reviews yet. Be the first to review this film!
-              </CardContent>
-            </Card>
-          )}
+          <PaginatedReviews movieId={movie.id} />
         </div>
       </div>
     </div>

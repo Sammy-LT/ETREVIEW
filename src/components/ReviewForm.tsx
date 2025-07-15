@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 
-export default function ReviewForm({ movieId }: { movieId: string }) {
+export default function ReviewForm({ movieId, onReviewSubmitted }: { movieId: string; onReviewSubmitted?: () => void }) {
   const [rating, setRating] = useState(5);
   const [hovered, setHovered] = useState<number | null>(null);
   const [comment, setComment] = useState("");
@@ -30,6 +30,7 @@ export default function ReviewForm({ movieId }: { movieId: string }) {
       setSuccess(true);
       setComment("");
       setRating(5);
+      if (onReviewSubmitted) onReviewSubmitted();
     }
   }
 
