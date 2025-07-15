@@ -1,25 +1,35 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Film, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import MovieCard from "@/components/MovieCard";
 import { authClient } from "@/lib/auth-client";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [genres, setGenres] = useState<{ id: string; name: string }[]>([]);
   const { data: session } = authClient.useSession();
   const isAdmin = session?.user?.email?.toLowerCase() === "admin@gmail.com";
   const searchParams = useSearchParams();
+  const router = useRouter();
   const search = searchParams.get("search") || "";
+  const genreId = searchParams.get("genreId") || "";
 
-  React.useEffect(() => {
+  useEffect(() => {
+    fetch("/api/genres")
+      .then((res) => res.json())
+      .then((data) => setGenres(data));
+  }, []);
+
+  useEffect(() => {
     async function fetchMovies() {
       setLoading(true);
       const params = new URLSearchParams();
       if (search) params.set("search", search);
+      if (genreId) params.set("genreId", genreId);
       const res = await fetch(`/api/movies?${params.toString()}`);
       const data = await res.json();
       setMovies(data);
@@ -27,15 +37,26 @@ export default function MoviesPage() {
     }
     fetchMovies();
     // eslint-disable-next-line
-  }, [search]);
+  }, [search, genreId]);
 
   function handleDelete(id: string) {
     setMovies((prev) => prev.filter((m) => m.id !== id));
   }
 
+  function handleGenreChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const newGenreId = e.target.value;
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    if (newGenreId) {
+      params.set("genreId", newGenreId);
+    } else {
+      params.delete("genreId");
+    }
+    router.push(`/movies?${params.toString()}`);
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      {/* Navigation */}
+      
       <nav className="border-b border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -86,7 +107,7 @@ export default function MoviesPage() {
         </div>
       </nav>
 
-      {/* Main Content */}
+      
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col space-y-8">
           <div className="flex items-center space-x-4">
@@ -107,6 +128,21 @@ export default function MoviesPage() {
                 </button>
               </Link>
             )}
+          </div>
+
+          {/* Genre Filter Dropdown */}
+          <div className="mb-4 max-w-xs">
+            <label className="block mb-1 font-medium">Filter by Genre</label>
+            <select
+              className="w-full border rounded px-3 py-2 text-black"
+              value={genreId}
+              onChange={handleGenreChange}
+            >
+              <option value="">All Genres</option>
+              {genres.map((genre) => (
+                <option key={genre.id} value={genre.id}>{genre.name}</option>
+              ))}
+            </select>
           </div>
 
           {/* Search Form */}

@@ -6,16 +6,26 @@ import Link from "next/link";
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const search = searchParams.get("search")?.trim() || "";
+  const genreId = searchParams.get("genreId") || "";
   try {
     const movies = await prisma.movie.findMany({
-      where: search
-        ? {
-            title: {
-              contains: search,
-              mode: "insensitive",
-            },
-          }
-        : {},
+      where: {
+        ...(search
+          ? {
+              title: {
+                contains: search,
+                mode: "insensitive",
+              },
+            }
+          : {}),
+        ...(genreId
+          ? {
+              genres: {
+                some: { id: genreId },
+              },
+            }
+          : {}),
+      },
       orderBy: { createdAt: "desc" },
       include: { genres: true },
     });

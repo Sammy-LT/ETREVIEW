@@ -85,21 +85,22 @@ export default function AddMovieForm() {
         </div>
         <div>
           <Label className="block mb-1 font-medium">Genres</Label>
-          <div className="flex flex-wrap gap-2 mb-2">
+          <select
+            multiple
+            className="w-full border rounded px-3 py-2"
+            value={selectedGenres}
+            onChange={e => {
+              const options = Array.from(e.target.selectedOptions);
+              setSelectedGenres(options.map(opt => opt.value));
+            }}
+          >
             {genres.map((genre) => (
-              <label key={genre.id} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  value={genre.id}
-                  checked={selectedGenres.includes(genre.id)}
-                  onChange={() => handleGenreChange(genre.id)}
-                  className="accent-blue-600"
-                />
-                <span>{genre.name}</span>
-              </label>
+              <option key={genre.id} value={genre.id}>
+                {genre.name}
+              </option>
             ))}
-          </div>
-          <div className="flex flex-wrap gap-1">
+          </select>
+          <div className="flex flex-wrap gap-1 mt-2">
             {selectedGenres.map((id) => {
               const genre = genres.find((g) => g.id === id);
               return genre ? (
