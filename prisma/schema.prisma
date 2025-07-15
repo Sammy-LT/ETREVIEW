@@ -81,6 +81,13 @@ model Verification {
   @@map("verifications")
 }
 
+model Genre {
+  id     String   @id @default(uuid())
+  name   String   @unique
+  slug   String   @unique
+  movies Movie[]  @relation("MovieGenres")
+}
+
 model Movie {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
@@ -90,7 +97,9 @@ model Movie {
   director    String?
   releaseYear Int?
   imageUrl    String?
+  watchUrl    String? // Link to watch the movie
   reviews     Review[]
+  genres      Genre[] @relation("MovieGenres")
 }
 
 model Review {

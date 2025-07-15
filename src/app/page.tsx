@@ -101,14 +101,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-      
+      {/* Navigation */}
       <nav className="border-b border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Film className="h-8 w-8 text-yellow-500" />
             <Link href="/" className="text-2xl font-bold">Ethio<span className="text-yellow-500">Flix</span></Link>
           </div>
-          
           <div className="hidden md:flex items-center space-x-6">
             <Link href="/" className="flex items-center space-x-1 text-gray-300 hover:text-white">
               <HomeIcon className="h-4 w-4" />
@@ -122,11 +121,7 @@ export default function Home() {
               <BookOpen className="h-4 w-4" />
               <span>News</span>
             </Link>
-            
-           
           </div>
-          
-          
         </div>
       </nav>
 
@@ -139,7 +134,6 @@ export default function Home() {
           <p className="text-xl text-gray-300 mb-8">
             Track what you've watched. Share your thoughts. Find your next favorite Ethiopian film.
           </p>
-          
           <div className="relative max-w-xl mx-auto">
             <Input 
               placeholder="Search for Ethiopian movies..." 
@@ -167,37 +161,36 @@ export default function Home() {
               Reviews
             </TabsTrigger>
           </TabsList>
-          
+
           {/* Trending Tab */}
           <TabsContent value="trending">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
               {trendingMovies.map((movie) => (
                 <Card key={movie.id} className="bg-gray-800 border-gray-700 hover:border-yellow-500 transition-colors">
                   <CardHeader>
-  <div className="aspect-[2/3] bg-gray-700 rounded-md overflow-hidden relative">
-    {movie.poster ? (
-      <img
-        src={movie.poster}
-        alt={movie.title}
-        className="w-full h-full object-cover"
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-          e.currentTarget.src = "";
-          e.currentTarget.parentElement!.innerHTML = `
-            <div class="w-full h-full flex items-center justify-center bg-gray-700">
-              <Film class="h-12 w-12 text-gray-500" />
-            </div>
-          `;
-        }}
-      />
-    ) : (
-      <div className="w-full h-full flex items-center justify-center bg-gray-700">
-        <Film className="h-12 w-12 text-gray-500" />
-      </div>
-    )}
-  </div>
-</CardHeader>
- 
+                    <div className="aspect-[2/3] bg-gray-700 rounded-md overflow-hidden relative">
+                      {movie.poster ? (
+                        <img
+                          src={movie.poster}
+                          alt={movie.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "";
+                            e.currentTarget.parentElement!.innerHTML = `
+                              <div class=\"w-full h-full flex items-center justify-center bg-gray-700\">
+                                <Film class=\"h-12 w-12 text-gray-500\" />
+                              </div>
+                            `;
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-700">
+                          <Film className="h-12 w-12 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                  </CardHeader>
                   <CardContent className="p-4">
                     <CardTitle className="text-lg">{movie.title}</CardTitle>
                     <CardDescription className="text-gray-400">
@@ -211,12 +204,12 @@ export default function Home() {
                       ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="flex justify-between items-center p-4 pt-0">
+                  <CardFooter className="flex items-center">
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
                       <span>{movie.rating}</span>
                     </div>
-                    <Button variant="outline" size="sm" className="border-gray-600">
+                    <Button variant="outline" size="sm" className="border-gray-600 ml-auto">
                       Details
                     </Button>
                   </CardFooter>
@@ -224,7 +217,7 @@ export default function Home() {
               ))}
             </div>
           </TabsContent>
-          
+
           {/* All Movies Tab */}
           <TabsContent value="all">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
@@ -248,12 +241,12 @@ export default function Home() {
                       ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="flex justify-between items-center p-4 pt-0">
+                  <CardFooter className="flex items-center">
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
                       <span>{movie.rating}</span>
                     </div>
-                    <Button variant="outline" size="sm" className="border-gray-600">
+                    <Button variant="outline" size="sm" className="border-gray-600 ml-auto">
                       Details
                     </Button>
                   </CardFooter>
@@ -261,55 +254,7 @@ export default function Home() {
               ))}
             </div>
           </TabsContent>
-          
-          {/* Reviews Tab */}
-          <TabsContent value="reviews">
-            <div className="space-y-6 mt-6">
-              {recentReviews.map((review) => (
-                <Card key={review.id} className="bg-gray-800 border-gray-700">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">{review.movie}</CardTitle>
-                        <CardDescription className="text-gray-400">
-                          Review by {review.user} • {review.date}
-                        </CardDescription>
-                      </div>
-                      <div className="flex items-center bg-gray-700 px-2 py-1 rounded">
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
-                        <span>{review.rating}</span>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300">"{review.comment}"</p>
-                  </CardContent>
-                  <CardFooter>
-                    <Button variant="ghost" size="sm" className="text-yellow-500">
-                      Read full review
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
         </Tabs>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gray-800 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h3 className="text-3xl font-bold mb-4">Ready to start tracking your Ethiopian movie journey?</h3>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join our community of Ethiopian cinema enthusiasts and share your passion for film.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-           
-            <Button variant="outline" className="border-gray-500 px-8 py-6 text-lg">
-              Learn More
-            </Button>
-          </div>
-        </div>
       </section>
 
       {/* Footer */}

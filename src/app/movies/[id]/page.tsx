@@ -78,9 +78,13 @@ export default async function MovieDetailsPage({ params }: { params: { id: strin
               
             <div className="flex gap-3 mb-6">
               <QuickStarRating movieId={movie.id} />
-              <Button variant="outline" className="text-green-500 border-gray-700 hover:bg-green-500/10">
-                {/* You can add another action here if needed */}
-              </Button>
+              {movie.watchUrl && (
+                <a href={movie.watchUrl} target="_blank" rel="noopener noreferrer">
+                  <Button variant="default" className="bg-green-600 hover:bg-green-700 text-white">
+                    Watch Now
+                  </Button>
+                </a>
+              )}
             </div>
 
         
