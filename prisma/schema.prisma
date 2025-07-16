@@ -106,13 +106,15 @@ model Review {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  rating    Int      // 1-5
-  comment   String?
+  rating    Int?     // 1-5, only for ratings (no comment)
+  comment   String?  // Only for reviews (no rating)
   movie     Movie    @relation(fields: [movieId], references: [id])
   movieId   String
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?
   likes     ReviewLike[]
+  isRatingOnly Boolean @default(false) // true for ratings, false for reviews
+  // Enforce at the application level: either rating or comment, not both
 }
 
 model ReviewLike {

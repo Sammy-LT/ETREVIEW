@@ -1,10 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Star } from "lucide-react";
 
 export default function ReviewForm({ movieId, onReviewSubmitted }: { movieId: string; onReviewSubmitted?: () => void }) {
-  const [rating, setRating] = useState(5);
-  const [hovered, setHovered] = useState<number | null>(null);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -17,7 +14,7 @@ export default function ReviewForm({ movieId, onReviewSubmitted }: { movieId: st
     setSuccess(false);
     const res = await fetch("/api/reviews", {
       method: "POST",
-      body: JSON.stringify({ movieId, rating, comment }),
+      body: JSON.stringify({ movieId, comment }),
       headers: { "Content-Type": "application/json" },
     });
     setLoading(false);
@@ -29,33 +26,12 @@ export default function ReviewForm({ movieId, onReviewSubmitted }: { movieId: st
     } else {
       setSuccess(true);
       setComment("");
-      setRating(5);
       if (onReviewSubmitted) onReviewSubmitted();
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-2 mb-6">
-      <div className="flex items-center mb-2">
-        {[1,2,3,4,5].map(n => (
-          <button
-            key={n}
-            type="button"
-            onClick={() => setRating(n)}
-            onMouseEnter={() => setHovered(n)}
-            onMouseLeave={() => setHovered(null)}
-            className="focus:outline-none"
-          >
-            <Star
-              className={`h-7 w-7 transition-colors ${
-                (hovered ?? rating) >= n ? "text-yellow-500 fill-yellow-500" : "text-gray-400"
-              }`}
-              fill={(hovered ?? rating) >= n ? "#eab308" : "none"}
-            />
-          </button>
-        ))}
-        <span className="ml-2 text-yellow-500 font-bold">{rating} / 5</span>
-      </div>
       <textarea
         value={comment}
         onChange={e => setComment(e.target.value)}

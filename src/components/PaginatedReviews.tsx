@@ -79,13 +79,7 @@ export default function PaginatedReviews({ movieId }: { movieId: string }) {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-green-500">Reviews</h2>
-        {avgRating && (
-          <div className="flex items-center">
-            <Star className="h-5 w-5 text-green-500 mr-1" />
-            <span className="font-bold">{avgRating.toFixed(1)}</span>
-            <span className="text-gray-400 ml-1">/ 5 from {total} {total === 1 ? 'review' : 'reviews'}</span>
-          </div>
-        )}
+        {/* Removed average rating and stars from the reviews section */}
       </div>
       <ReviewForm movieId={movieId} onReviewSubmitted={handleReviewSubmitted} />
       {reviews.length > 0 ? (
@@ -95,14 +89,7 @@ export default function PaginatedReviews({ movieId }: { movieId: string }) {
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <div className="flex mr-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${i < r.rating ? "fill-green-500 text-green-500" : "text-gray-700"}`}
-                        />
-                      ))}
-                    </div>
+                    {/* Removed star rating display */}
                     <span className="font-bold text-green-500">{r.user?.name || "Anonymous"}</span>
                   </div>
                   <span className="text-sm text-gray-400">
