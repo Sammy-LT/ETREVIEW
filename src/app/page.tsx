@@ -160,18 +160,10 @@ export default function Home() {
         {/* Main Content */}
         <section className="container mx-auto px-4 py-8">
           <Tabs defaultValue="top-rated" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-800">
+            <TabsList className="grid w-full grid-cols-1 bg-gray-800">
               <TabsTrigger value="top-rated" className="data-[state=active]:bg-gray-700 text-white">
                 <Star className="h-4 w-4 mr-2" />
                 Top Rated
-              </TabsTrigger>
-              <TabsTrigger value="all" className="data-[state=active]:bg-gray-700 text-white">
-                <Film className="h-4 w-4 mr-2" />
-                All Movies
-              </TabsTrigger>
-              <TabsTrigger value="reviews" className="data-[state=active]:bg-gray-700 text-white">
-                <Star className="h-4 w-4 mr-2" />
-                Reviews
               </TabsTrigger>
             </TabsList>
 
@@ -204,12 +196,12 @@ export default function Home() {
                             </Badge>
                           ))}
                         </div>
-                      </CardContent>
-                      <CardFooter className="flex items-center">
-                        <div className="flex items-center">
+                        <div className="flex items-center mt-2">
                           <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
                           <span className="text-white font-bold text-lg">{movie.avgRating ? movie.avgRating.toFixed(1) : "N/A"}</span>
                         </div>
+                      </CardContent>
+                      <CardFooter className="flex items-center">
                         <Button variant="primary" className="ml-auto">
                           Details
                         </Button>
@@ -220,45 +212,6 @@ export default function Home() {
               ) : (
                 <div className="text-white">No top rated movies found.</div>
               )}
-            </TabsContent>
-
-           
-
-            {/* All Movies Tab */}
-            <TabsContent value="all">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                {allMovies.map((movie: any) => (
-                  <Card key={movie.id} className="bg-gray-800 border-gray-700 hover:border-yellow-500 transition-colors">
-                    <CardHeader className="p-0">
-                      <div className="aspect-[2/3] bg-gray-700 rounded-t-md flex items-center justify-center">
-                        <Film className="h-12 w-12 text-gray-500" />
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-4">
-                      <CardTitle className="text-lg text-white">{movie.title}</CardTitle>
-                      <CardDescription className="text-gray-300">
-                        {movie.year} • {movie.director}
-                      </CardDescription>
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {movie.genres.map((genre: any) => (
-                          <Badge key={genre} variant="secondary" className="text-xs bg-gray-700 text-white">
-                            {genre}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex items-center">
-                      <div className="flex items-center">
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
-                        <span className="text-white">{movie.rating}</span>
-                      </div>
-                      <Button variant="outline" className="border-gray-600 ml-auto text-white">
-                        Details
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
             </TabsContent>
           </Tabs>
         </section>
